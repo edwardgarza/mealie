@@ -259,12 +259,20 @@ class IngredientFoodModel(SqlAlchemyBase, BaseMixins):
     label_id: FilterableColumn[GUID | None] = mapped_column(GUID, ForeignKey("multi_purpose_labels.id"), index=True)
     label: Mapped[MultiPurposeLabel | None] = orm.relationship(MultiPurposeLabel, uselist=False, back_populates="foods")
 
+    # The food database entry this food's nutrition comes from, when a user has chosen one.
+    # Strings, so other databases than the bundled USDA files can be linked later.
+    nutrition_source: FilterableColumn[str | None] = mapped_column(String)
+    nutrition_source_id: FilterableColumn[str | None] = mapped_column(String)
+
     # Automatically updated by sqlalchemy event, do not write to this manually
     name_normalized: FilterableColumn[str | None] = mapped_column(sa.String, index=True)
     plural_name_normalized: FilterableColumn[str | None] = mapped_column(sa.String, index=True)
 
     model_config = AutoInitOptions(
         exclude={
+            # set through their own endpoint, so an ordinary food edit can't clear the link
+            "nutrition_source",
+            "nutrition_source_id",
             "households_with_ingredient_food",
             # substitutions are resolved explicitly, since auto_init creates rows it can't find
             "substitutions",

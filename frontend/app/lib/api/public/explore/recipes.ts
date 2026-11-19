@@ -1,6 +1,6 @@
 import { BaseCRUDAPIReadOnly } from "~/lib/api/base/base-clients";
 import { route } from "../../base";
-import { RecipeOut, RecipeSuggestionQuery, RecipeSuggestionResponse, RecipeSummary } from "~/lib/api/types/recipe";
+import { CalculatedNutritionOut, RecipeOut, RecipeSuggestionQuery, RecipeSuggestionResponse, RecipeSummary } from "~/lib/api/types/recipe";
 import { ApiRequestInstance, PaginationData } from "~/lib/api/types/non-generated";
 import { RecipeSearchQuery } from "../../user/recipes/recipe";
 
@@ -23,6 +23,12 @@ export class PublicRecipeApi extends BaseCRUDAPIReadOnly<RecipeOut, RecipeSummar
 
   async search(rsq: RecipeSearchQuery) {
     return await this.requests.get<PaginationData<RecipeSummary>>(route(routes.recipesGroupSlug(this.groupSlug), rsq));
+  }
+
+  async getCalculatedNutrition(recipeSlug: string) {
+    return await this.requests.get<CalculatedNutritionOut>(
+      `${routes.recipesGroupSlugRecipeSlug(this.groupSlug, recipeSlug)}/nutrition/calculated`,
+    );
   }
 
   async getSuggestions(q: RecipeSuggestionQuery, foods: string[] | null = null, tools: string[]| null = null) {

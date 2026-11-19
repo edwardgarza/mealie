@@ -74,6 +74,10 @@
       class="mt-4"
       :edit="isEditForm"
     />
+    <RecipeNutritionCalculated
+      v-if="!isEditForm && recipe.slug"
+      :slug="recipe.slug"
+    />
     <RecipeAssets
       v-if="recipe.settings.showAssets"
       v-model="recipe.assets"
@@ -92,6 +96,7 @@ import { useStaticRoutes } from "~/composables/api";
 import type { RecipeOut } from "~/lib/api/types/recipe";
 import RecipeOrganizerSelector from "@/components/Domain/Recipe/RecipeOrganizerSelector.vue";
 import RecipeNutrition from "~/components/Domain/Recipe/RecipeNutrition.vue";
+import RecipeNutritionCalculated from "~/components/Domain/Recipe/RecipeNutritionCalculated.vue";
 import RecipeChips from "@/components/Domain/Recipe/RecipeChips.vue";
 import RecipeAssets from "@/components/Domain/Recipe/RecipeAssets.vue";
 

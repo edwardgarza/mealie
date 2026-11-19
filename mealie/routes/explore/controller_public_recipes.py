@@ -16,8 +16,10 @@ from mealie.schema.cookbook.cookbook import CookBookOut
 from mealie.schema.make_dependable import make_dependable
 from mealie.schema.recipe import RecipeOut
 from mealie.schema.recipe.recipe import RecipeSummary
+from mealie.schema.recipe.recipe_nutrition_calculated import CalculatedNutritionOut
 from mealie.schema.recipe.recipe_suggestion import RecipeSuggestionQuery, RecipeSuggestionResponse
 from mealie.schema.response.pagination import PaginationBase, PaginationQuery, RecipeSearchQuery
+from mealie.services.nutrition.nutrition_service import calculate_recipe_nutrition
 
 router = APIRouter(prefix="/recipes")
 
@@ -115,3 +117,8 @@ class PublicRecipesController(BasePublicHouseholdExploreController):
             raise RECIPE_NOT_FOUND_EXCEPTION
 
         return recipe
+
+    @router.get("/{recipe_slug}/nutrition/calculated", response_model=CalculatedNutritionOut)
+    def get_calculated_nutrition(self, recipe_slug: str) -> CalculatedNutritionOut:
+        """Estimate nutrition from the ingredients of a publicly visible recipe"""
+        return calculate_recipe_nutrition(self.get_recipe(recipe_slug))

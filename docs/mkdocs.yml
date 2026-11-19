@@ -116,6 +116,7 @@ nav:
           - Migration Guide: "contributors/developers-guide/migration-guide.md"
       - Guides:
           - Improving Ingredient Parser: "contributors/guides/ingredient-parser.md"
+          - Food Nutrition Design: "contributors/guides/food-nutrition-design.md"
 
   - News:
       - Surveys:

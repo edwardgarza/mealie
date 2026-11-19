@@ -357,6 +357,8 @@ export interface IngredientFoodOut {
   householdsWithIngredientFood: string[];
   label: MultiPurposeLabelSummary | null;
   recipeCount: number;
+  nutritionSource: string | null;
+  nutritionSourceId: string | null;
   createdAt: string | null;
   updatedAt: string | null;
 }

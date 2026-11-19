@@ -30,6 +30,22 @@ class RepositoryFood(GroupRepositoryGeneric[IngredientFoodOut, IngredientFoodMod
         stmt = select(self.model).filter_by(**self._filter_builder(**{"id": id}))
         return self.session.execute(stmt).scalars().one()
 
+    def set_nutrition_link(self, food_id: UUID4, source: str | None, source_id: str | None) -> IngredientFoodOut | None:
+        """Save, or with None clear, the food database entry a food's nutrition comes from.
+
+        These columns are kept out of the ordinary update so that editing a food can't drop the link.
+        """
+        food = self.session.execute(
+            select(self.model).filter_by(**self._filter_builder(**{"id": food_id}))
+        ).scalar_one_or_none()
+        if food is None:
+            return None
+
+        food.nutrition_source = source
+        food.nutrition_source_id = source_id
+        self.session.commit()
+        return self.get_one(food_id)
+
     def get_empty(self) -> Sequence[IngredientFoodModel]:
         # a food is only "unused" if it's absent from both recipe ingredients and
         # shopping list items; IngredientFoodModel has no ORM relationship to

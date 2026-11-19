@@ -224,6 +224,9 @@ class IngredientFoodOut(IngredientFoodCreate, MealieOutModel):
     recipe_count: int = 0
     substitutions: list[IngredientFoodSubstitution] = []  # type: ignore[assignment]  # narrows the create type's items; list is invariant
 
+    nutrition_source: str | None = None
+    nutrition_source_id: str | None = None
+
     created_at: datetime.datetime | None = None
     updated_at: datetime.datetime | None = UpdatedAtField(None)
 

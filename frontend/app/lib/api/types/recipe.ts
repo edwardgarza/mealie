@@ -46,6 +46,82 @@ export interface TagDraft {
   slug?: string | null;
   recipeCount?: number;
 }
+export interface CalculatedFoodMatch {
+  id: string;
+  name: string;
+  source: string;
+}
+export interface CalculatedIngredientOut {
+  referenceId: string | null;
+  display: string;
+  foodId: string | null;
+  foodName: string | null;
+  status: string;
+  counted: boolean;
+  grams: number | null;
+  method: string;
+  basis: string;
+  match: CalculatedFoodMatch | null;
+  matchMethod: string;
+  matchAssumed: boolean;
+  alternatives: CalculatedFoodMatch[];
+  nutrients: {
+    [k: string]: number;
+  };
+}
+export interface CalculatedNrfComponent {
+  key: string;
+  kind: string;
+  amount: number;
+  reference: number;
+  percent: number;
+  missingLines: number;
+}
+export interface CalculatedNrfOut {
+  score: number;
+  encourage: number;
+  limit: number;
+  components: CalculatedNrfComponent[];
+}
+export interface CalculatedNutriScoreComponent {
+  key: string;
+  kind: string;
+  value: number;
+  unit: string;
+  points: number;
+  maxPoints: number;
+  counted: boolean;
+}
+export interface CalculatedNutriScoreOut {
+  score: number;
+  grade: string;
+  negative: number;
+  positive: number;
+  weight: number;
+  components: CalculatedNutriScoreComponent[];
+}
+export interface CalculatedNutrientInfo {
+  key: string;
+  unit: string;
+}
+export interface CalculatedNutritionOut {
+  servings: number | null;
+  countedLines: number;
+  countableLines: number;
+  nutrients: CalculatedNutrientInfo[];
+  total: {
+    [k: string]: number;
+  };
+  perServing: {
+    [k: string]: number;
+  } | null;
+  storedPerServing: {
+    [k: string]: number;
+  };
+  nrf: CalculatedNrfOut | null;
+  nutriScore: CalculatedNutriScoreOut | null;
+  ingredients: CalculatedIngredientOut[];
+}
 export interface CategoryCreate {
   name: string;
 }
@@ -170,6 +246,8 @@ export interface IngredientFoodOut {
   householdsWithIngredientFood: string[];
   label: MultiPurposeLabelSummary | null;
   recipeCount: number;
+  nutritionSource: string | null;
+  nutritionSourceId: string | null;
   createdAt: string | null;
   updatedAt: string | null;
 }
@@ -653,6 +731,21 @@ export interface UpdateImageResponse {
   image: string;
 }
 export interface MealieOutModel {}
+export interface FoodNutritionLinkUpdate {
+  recordId?: string | null;
+}
+export interface NutritionRecordSummary {
+  id: string;
+  name: string;
+  source: string;
+  category: string;
+  energyKcal: number | null;
+  proteinG: number | null;
+  fatG: number | null;
+  carbohydrateG: number | null;
+  hasVolumeWeight: boolean;
+  hasCountWeight: boolean;
+}
 export interface RequestQuery {
   orderBy?: string | null;
   orderByNullPosition?: OrderByNullPosition | null;

@@ -65,6 +65,8 @@ foods_empty = "/api/foods/empty"
 """`/api/foods/empty`"""
 foods_merge = "/api/foods/merge"
 """`/api/foods/merge`"""
+foods_nutrition_search = "/api/foods/nutrition/search"
+"""`/api/foods/nutrition/search`"""
 groups_ai_providers_prompts = "/api/groups/ai-providers/prompts"
 """`/api/groups/ai-providers/prompts`"""
 groups_ai_providers_providers = "/api/groups/ai-providers/providers"
@@ -350,6 +352,11 @@ def explore_groups_group_slug_recipes_recipe_slug(group_slug, recipe_slug):
     return f"{prefix}/explore/groups/{group_slug}/recipes/{recipe_slug}"
 
 
+def explore_groups_group_slug_recipes_recipe_slug_nutrition_calculated(group_slug, recipe_slug):
+    """`/api/explore/groups/{group_slug}/recipes/{recipe_slug}/nutrition/calculated`"""
+    return f"{prefix}/explore/groups/{group_slug}/recipes/{recipe_slug}/nutrition/calculated"
+
+
 def explore_groups_group_slug_recipes_suggestions(group_slug):
     """`/api/explore/groups/{group_slug}/recipes/suggestions`"""
     return f"{prefix}/explore/groups/{group_slug}/recipes/suggestions"
@@ -358,6 +365,11 @@ def explore_groups_group_slug_recipes_suggestions(group_slug):
 def foods_item_id(item_id):
     """`/api/foods/{item_id}`"""
     return f"{prefix}/foods/{item_id}"
+
+
+def foods_item_id_nutrition_link(item_id):
+    """`/api/foods/{item_id}/nutrition-link`"""
+    return f"{prefix}/foods/{item_id}/nutrition-link"
 
 
 def groups_ai_providers_prompts_prompt_name(prompt_name):
@@ -593,6 +605,11 @@ def recipes_slug_image(slug):
 def recipes_slug_last_made(slug):
     """`/api/recipes/{slug}/last-made`"""
     return f"{prefix}/recipes/{slug}/last-made"
+
+
+def recipes_slug_nutrition_calculated(slug):
+    """`/api/recipes/{slug}/nutrition/calculated`"""
+    return f"{prefix}/recipes/{slug}/nutrition/calculated"
 
 
 def recipes_timeline_events_item_id(item_id):

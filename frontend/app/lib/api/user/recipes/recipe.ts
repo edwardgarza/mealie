@@ -5,6 +5,7 @@ import { route } from "../../base";
 import { CommentsApi } from "./recipe-comments";
 import { RecipeShareApi } from "./recipe-share";
 import type {
+  CalculatedNutritionOut,
   RecipeOut,
   RecipeDraft,
   RecipeSummary,
@@ -59,6 +60,7 @@ const routes = {
   recipesSlugCommentsId: (slug: string, id: number) => `${prefix}/recipes/${slug}/comments/${id}`,
 
   recipesSlugLastMade: (slug: string) => `${prefix}/recipes/${slug}/last-made`,
+  recipesSlugNutritionCalculated: (slug: string) => `${prefix}/recipes/${slug}/nutrition/calculated`,
   recipesTimelineEventId: (id: string) => `${prefix}/recipes/timeline/events/${id}`,
   recipesTimelineEventIdImage: (id: string) => `${prefix}/recipes/timeline/events/${id}/image`,
 };
@@ -294,6 +296,10 @@ export class RecipeAPI extends BaseCRUDAPI<RecipeCreate, RecipeOut, RecipeDraft,
 
   async patchMany(payload: Partial<RecipeDraft>[]) {
     return await this.requests.patch<RecipeOut[], Partial<RecipeDraft>[]>(routes.recipesBase, payload);
+  }
+
+  async getCalculatedNutrition(recipeSlug: string) {
+    return await this.requests.get<CalculatedNutritionOut>(routes.recipesSlugNutritionCalculated(recipeSlug));
   }
 
   async updateLastMade(recipeSlug: string, timestamp: string) {

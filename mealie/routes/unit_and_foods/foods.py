@@ -16,8 +16,14 @@ from mealie.schema.recipe.recipe_ingredient import (
     IngredientFoodPagination,
     IngredientFoodSave,
 )
+from mealie.schema.recipe.recipe_nutrition_calculated import FoodNutritionLinkUpdate, NutritionRecordSummary
 from mealie.schema.response.pagination import PaginationQuery
 from mealie.schema.response.responses import SuccessResponse
+from mealie.services.nutrition.nutrition_service import (
+    NUTRITION_SOURCE_USDA,
+    nutrition_record_exists,
+    search_nutrition_records,
+)
 
 router = APIRouter(prefix="/foods", tags=["Recipes: Foods"], route_class=MealieCrudRoute)
 
@@ -56,6 +62,25 @@ class IngredientFoodsController(BaseUserController):
     def get_all_empty(self):
         """Returns a list of foods that are not used by any recipe"""
         return self.repo.get_empty()
+
+    @router.get("/nutrition/search", response_model=list[NutritionRecordSummary])
+    def search_nutrition(self, q: str, limit: int = 20):
+        """Search the bundled food database for an entry to take a food's nutrition from"""
+        return search_nutrition_records(q, max(1, min(limit, 50)))
+
+    @router.put(
+        "/{item_id}/nutrition-link", response_model=IngredientFoodOut, dependencies=[require(Perm.GROUP_ORGANIZE)]
+    )
+    def set_nutrition_link(self, item_id: UUID4, data: FoodNutritionLinkUpdate):
+        """Choose the food database entry a food's nutrition comes from, or clear the choice"""
+        if data.record_id is not None and not nutrition_record_exists(data.record_id):
+            raise HTTPException(404, "nutrition record not found")
+
+        source = NUTRITION_SOURCE_USDA if data.record_id is not None else None
+        food = self.repo.set_nutrition_link(item_id, source, data.record_id)
+        if food is None:
+            raise HTTPException(404, "food not found")
+        return food
 
     @router.put("/merge", response_model=SuccessResponse, dependencies=[require(Perm.GROUP_ORGANIZE)])
     def merge_one(self, data: IngredientFoodMerge):
